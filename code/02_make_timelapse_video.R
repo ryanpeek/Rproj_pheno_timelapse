@@ -14,7 +14,7 @@ library(purrr) # for looping
 # Set Parameters ----------------------------------------------------------
 
 grp_id <- "" # dfw region
-cam_site <- "SAHE1" # location
+site_id <- "COLE1" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
@@ -34,7 +34,7 @@ photo_date_dir <- basename(photo_directory)
 exif_path <- fs::path_dir(photo_directory)
 
 # read in the exif metadata (run via 02_extract_metadata)
-photo_exif <- read_csv(glue("{exif_path}/pheno_exif_{cam_site}_{photo_date_dir}.csv.gz"))
+photo_exif <- read_csv(glue("{exif_path}/pheno_exif_{site_id}_{photo_date_dir}.csv.gz"))
 
 # Get Photo Stack ---------------------------------------------------------
 
@@ -58,7 +58,7 @@ photo_exif_noon <- photo_exif |>
 # Get photo composite ----------------------------------------------------
 
 # this takes all photos from the filtered dataset and resizes and stacks
-photo_stack <- get_photo_stack(glue("{photo_directory}/{photo_exif_noon$file_name}"), scale_w_h = "800x560")
+photo_stack <- get_photo_stack(glue("{photo_directory}/{photo_exif_noon$pheno_name}"), scale_w_h = "800x560")
 beepr::beep()
 
 # check image
@@ -69,7 +69,7 @@ beepr::beep()
 fs::dir_create(glue("{exif_path}/videos"))
 
 # makes a high quality video
-image_write_video(image = photo_stack, path = glue("{exif_path}/videos/{cam_site}_{photo_date_dir}_video.mp4"), framerate =  12)
+image_write_video(image = photo_stack, path = glue("{exif_path}/videos/{site_id}_{photo_date_dir}_video.mp4"), framerate =  12)
 
 ## Save to GIF --------------------------------------------------------------
 

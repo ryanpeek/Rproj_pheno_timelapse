@@ -17,7 +17,7 @@ library(terra) # for working with raster images
 # Get Photo Directory --------------------------------------------
 
 #cam_region <- "R2" # dfw region
-cam_site <- "SAHE1" # location
+site_id <- "COLE1" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
@@ -37,13 +37,13 @@ photo_date_dir <- basename(photo_directory)
 exif_path <- fs::path_dir(photo_directory)
 
 # read in the exif metadata (run via 02_extract_metadata)
-photo_exif <- read_csv(glue("{exif_path}/pheno_exif_{cam_site}_{photo_date_dir}.csv.gz"))
-#photo_exif <- read_csv(glue("{exif_path}/pheno_exif_{cam_region}.{cam_site}_{photo_date_dir}.csv.gz"))
+photo_exif <- read_csv(glue("{exif_path}/pheno_exif_{site_id}_{photo_date_dir}.csv.gz"))
+#photo_exif <- read_csv(glue("{exif_path}/pheno_exif_{cam_region}.{site_id}_{photo_date_dir}.csv.gz"))
 
 # Select Photo for Drawing ROI -------------------------------------------------------
 
 # get a test image, change number for different image
-img <- terra::rast(photo_exif$full_path[5])
+img <- terra::rast(glue("{photo_directory}/{photo_exif$pheno_name[14]}"))
 
 # flip?
 img <- terra::flip(img)
@@ -111,12 +111,12 @@ plot(r) # preview mask plot
 # Write out ROI Mask -----------------------------------------------------------
 
 fs::dir_create(path = glue("{exif_path}/ROI/"))
-terra::writeRaster(r, filename = glue("{exif_path}/ROI/{cam_site}_{mask_type}.tif"))
+terra::writeRaster(r, filename = glue("{exif_path}/ROI/{site_id}_{mask_type}.tif"))
 
 # Make a Plot -------------------------------------------------------------
 
 # make sure to save and write out (only once)
-png(filename = glue("{exif_path}/ROI/pheno_{cam_site}_masked_{mask_type}.png"), bg = "transparent")
+png(filename = glue("{exif_path}/ROI/pheno_{site_id}_masked_{mask_type}.png"), bg = "transparent")
 plotRGB(img)
 plot(r, col=c(NA, alpha("yellow",0.8)), legend=FALSE, axes=FALSE, add=TRUE)
 dev.off()
@@ -124,7 +124,7 @@ dev.off()
 # Quick Check -------------------------------------------------------------
 
 # read in and plot
-r_in <- rast(glue("{exif_path}/ROI/{cam_site}_{mask_type}.tif"))
+r_in <- rast(glue("{exif_path}/ROI/{site_id}_{mask_type}.tif"))
 r_poly <- as.polygons(r_in) # make polygons
 
 # filter to 1 (only the masked region)

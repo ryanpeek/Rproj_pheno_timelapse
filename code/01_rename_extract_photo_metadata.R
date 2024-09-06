@@ -53,7 +53,7 @@ if(!is.null(exif_version())){
 # Set Paths ---------------------------------------------------------------
 
 # CHANGE/CHECK THESE!
-site_id <- "MABE4" # Site ID (avoid spaces and special characters)
+site_id <- "COLE1" # Site ID (avoid spaces and special characters)
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
@@ -121,12 +121,13 @@ photo_attribs |> group_by(pheno_name) |> tally() |> filter(n>1) |> nrow()
 
 # create path to drive location:
 metadata_path <- fs::path_dir(photo_directory)
+last_date <- last(format(as_date(photo_attribs$datetime), '%Y%m%d'))
 
 # region or year
 grp_id <- 2024 # "R1" or "2024"
 
 # write out metadata
-write_csv(photo_attribs, glue("{metadata_path}/pheno_exif_{site_id}_{basename(photo_directory)}.csv.gz"))
+write_csv(photo_attribs, glue("{metadata_path}/pheno_exif_{site_id}_{last_date}.csv.gz"))
 
 #write_csv(photo_attribs, glue("{metadata_path}/pheno_exif_{grp_id}.{site_id}_{basename(photo_directory)}.csv.gz"))
 
