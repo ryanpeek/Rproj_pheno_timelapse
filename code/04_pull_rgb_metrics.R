@@ -177,7 +177,7 @@ ggplot() +
     aes(x=datetime, y=gcc90, image = glue("{exif_path}/ROI/pheno_{site_id}_masked_{mask_type}.png")), size=0.5)
 
 
-ggsave(glue("figs/gcc90_{site_id}_{mask_type}_midday.png"), width = 10, height = 8, dpi = 300, bg = "white")
+ggsave(glue("figs/gcc_{site_id}_{mask_type}_midday.png"), width = 10, height = 8, dpi = 300, bg = "white")
 
 # GRVI: look at green red veg index which tracks senescence
 # expect: vegetation (index > 0), water and snow (index around 0), and soils (x < 0)
