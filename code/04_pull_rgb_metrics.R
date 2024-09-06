@@ -11,7 +11,7 @@ library(terra)
 
 # Get Photo Directory --------------------------------------------
 
-site_id <- "COLE1" # location
+site_id <- "DOWN1" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
@@ -36,7 +36,7 @@ photo_exif <- read_csv(glue("{exif_path}/pheno_exif_{site_id}_{photo_date_dir}.c
 # Get Mask ----------------------------------------------------------------
 
 # Create NEW mask type and number (if first of type, 01)
-mask_type <-"GR_01_01" # i.e, "DB_01_01"
+mask_type <-"DB_01_01" # i.e, "DB_01_01"
 
 # read in mask
 pheno_mask <- terra::rast(glue("{exif_path}/ROI/{site_id}_{mask_type}.tif"))
@@ -147,21 +147,18 @@ write_csv(df2, file = glue("{exif_path}/pheno_metrics_{site_id}_{mask_type}_{pho
 
 df_mids <- read_csv(file = pheno_files)
 
-# VISUALIZATION --------------------------------------------------------------
-
 # filter to just one value at noon:
 df_mid <- df_mids |>
   filter(hms("12:00:00")==hms::as_hms(datetime))
 
-# plot greeness from 90th percentile and excess greeness (exG)
-  #geom_violin(data=df_mid , aes(x=datetime, y=gcc90, group=month(datetime), fill=month(datetime)), alpha=0.4) +
+# VISUALIZATION --------------------------------------------------------------
 
 # add bg image
 library(ggimage)
 
 # set the date to use for these plots (depends on photo set)
 range(df_mid$datetime)
-photo_date_location <- "2024-07-19 00:00:00"
+photo_date_location <- "2024-08-07 00:00:00"
 
 ggplot() +
   geom_point(data=df_mid , aes(x=datetime, y=gcc), color="green4", alpha=0.5) +
@@ -169,12 +166,12 @@ ggplot() +
   geom_smooth(data=df_mid, aes(x=datetime, y=gcc)) +
   scale_fill_viridis_c(option = "D", direction = -1) +
   scale_x_datetime(date_breaks = "2 months", date_labels = "%Y-%b") +
-  labs(title="Greenness Index (GCC90)",
+  labs(title="Greenness Index (GCC)",
        subtitle= glue("A metric tracking growth using RGB values (Mask: {mask_type})"),
        x="", caption="Data from RECONYX hourly camera") +
   geom_image(
-    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), gcc90 = .39),
-    aes(x=datetime, y=gcc90, image = glue("{exif_path}/ROI/pheno_{site_id}_masked_{mask_type}.png")), size=0.5)
+    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), gcc = .36),
+    aes(x=datetime, y=gcc, image = glue("{exif_path}/ROI/pheno_{site_id}_masked_{mask_type}.png")), size=0.5)
 
 
 ggsave(glue("figs/gcc_{site_id}_{mask_type}_midday.png"), width = 10, height = 8, dpi = 300, bg = "white")
@@ -189,7 +186,7 @@ ggplot() +
        subtitle= glue("A metric tracking growth and senescence using RGB values (Mask: {mask_type})"),
        x="", caption="Data from RECONYX hourly camera") +
   geom_image(
-    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), GRVI = 0.21),
+    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), GRVI = 0.015),
     aes(x=datetime, y=GRVI, image = glue("{exif_path}/ROI/pheno_{site_id}_masked_{mask_type}.png")), size=0.4)
 
 ggsave(glue("figs/grvi_{site_id}_{mask_type}_midday.png"), width = 10, height = 8, dpi = 300, bg = "white")
@@ -204,7 +201,7 @@ ggplot() +
        subtitle= glue("A metric tracking excess greeness using RGB values (Mask: {mask_type})"),
        x="", caption="Data from RECONYX hourly camera") +
   geom_image(
-    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), exG = 35),
+    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), exG = 9),
     aes(x=datetime, y=exG, image = glue("{exif_path}/ROI/pheno_{site_id}_masked_{mask_type}.png")), size=0.4)
 
 ggsave(glue("figs/exG_{site_id}_{mask_type}_midday.png"), width = 10, height = 8, dpi = 300, bg = "white")
@@ -227,13 +224,13 @@ df_mid %>%
 ## GCC: Different time periods ------------------------------------------
 
 df_mid %>%
-  plot_time_series_boxplot(datetime, gcc, .period = "3 day",  .interactive = FALSE, .title = glue("Gcc90 at {site_id}: 3 days"))
+  plot_time_series_boxplot(datetime, gcc, .period = "3 day",  .interactive = FALSE, .title = glue("GCC at {site_id}: 3 days"))
 
 df_mid %>%
-  plot_time_series_boxplot(datetime, gcc, .period = "1 week",  .interactive = FALSE, .title = glue("Gcc90 at {site_id}: 1 week"))
+  plot_time_series_boxplot(datetime, gcc, .period = "1 week",  .interactive = FALSE, .title = glue("GCC at {site_id}: 1 week"))
 
 df_mid %>%
-  plot_time_series_boxplot(datetime, gcc, .period = "1 month",  .interactive = FALSE, .title = glue("Gcc90 at {site_id}: 1 month"))
+  plot_time_series_boxplot(datetime, gcc, .period = "1 month",  .interactive = FALSE, .title = glue("GCC at {site_id}: 1 month"))
 
 
 # plot ACF diagnostics

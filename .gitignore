@@ -38,6 +38,8 @@ vignettes/*.pdf
 # ignore data
 data_raw/*json
 data_raw/*xlsx
+graybalance_mask_full_photo.tif
+code/sndbx/*
 
 # ignore html and figs
 *html
