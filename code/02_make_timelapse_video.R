@@ -14,13 +14,13 @@ library(purrr) # for looping
 # Set Parameters ----------------------------------------------------------
 
 grp_id <- "" # dfw region
-site_id <- "COLE1" # location
+site_id <- "DOWN1" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
 select_dir <- function(){
   print("Select any image file WITHIN the folder you want to use:")
-  dirname(file.choose(new = TRUE))
+  dirname(file.choose(new = FALSE))
 }
 
 # select an image from inside the folder of interest

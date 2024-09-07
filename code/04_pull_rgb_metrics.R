@@ -17,7 +17,7 @@ site_id <- "DOWN1" # location
 # this function helps select the folder and ensures there are images in the folder to use
 select_dir <- function(){
   print("Select any image file WITHIN the folder you want to use:")
-  dirname(file.choose(new = TRUE))
+  dirname(file.choose(new = FALSE))
 }
 
 # select an image from inside the folder of interest
