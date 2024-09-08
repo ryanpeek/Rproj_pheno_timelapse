@@ -16,7 +16,7 @@ library(terra) # for working with raster images
 
 # Get Photo Directory --------------------------------------------
 
-site_id <- "DOWN1" # location
+site_id <- "COLE1" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
@@ -72,7 +72,7 @@ RGB(img) <- 1:3
 # Create NEW mask type and number
 ## First number is for photo set (if photos shift and need a new version)
 ## second number is iterative to photo set and type
-mask_type <-"DB_01_01"
+mask_type <-"NA_01_01"
 
 # draw a polygon function
 drawPolygon <- function (col = "#80303080", lty = 1, ...)
