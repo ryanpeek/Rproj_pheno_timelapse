@@ -11,7 +11,7 @@ library(terra)
 
 # Get Photo Directory --------------------------------------------
 
-site_id <- "SAHE1" # location
+site_id <- "ELDO3" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
@@ -36,7 +36,7 @@ photo_exif <- read_csv(glue("{exif_path}/pheno_exif_{site_id}_{photo_date_dir}.c
 # Get Mask ----------------------------------------------------------------
 
 # Create NEW mask type and number (if first of type, 01)
-mask_type <-"GR_01_01" # i.e, "DB_01_01"
+mask_type <-"DB_01_01" # i.e, "DB_01_01"
 
 # read in mask
 pheno_mask <- terra::rast(glue("{exif_path}/ROI/{site_id}_{mask_type}.tif"))
@@ -45,9 +45,11 @@ pheno_mask <- terra::rast(glue("{exif_path}/ROI/{site_id}_{mask_type}.tif"))
 
 # test a single photo
 img <- terra::rast(glue("{photo_directory}/{photo_exif$pheno_name[19]}"))
-#img <- terra::flip(img) # note if not flipped masks will extract incorrect portion
 
 # plot to make sure mask is in the appropriate place...if not, need to redraw
+plotRGB(img)
+img <- terra::flip(img) # note if not flipped masks will extract incorrect portion
+
 plotRGB(img)
 plot(pheno_mask, col=c(NA, alpha("orange",0.8)), legend=FALSE, axes=FALSE, add=TRUE)
 
@@ -146,7 +148,7 @@ write_csv(df2, file = glue("{exif_path}/pheno_metrics_{site_id}_{mask_type}_{pho
 
 ## Read in and Combine Series  ----------------------------------------------------------------
 
-mask_type <- "GR_01_01"
+mask_type <- "DB_01_01"
 
 # read in series matching mask:
 (pheno_files <- fs::dir_ls(glue("{exif_path}"),regexp = glue("{mask_type}")))
@@ -164,20 +166,22 @@ library(ggimage)
 
 # set the date to use for these plots (depends on photo set)
 range(df_mid$datetime)
-photo_date_location <- "2024-08-21 00:00:00"
+#photo_date_location <- "2024-08-21 00:00:00"
+photo_date_location <- max(df_mid$datetime)-days(9)
 
 ggplot() +
-  geom_point(data=df_mid , aes(x=datetime, y=gcc), color="green4", alpha=0.5) +
-  hrbrthemes::theme_ipsum_rc() +
   geom_smooth(data=df_mid, aes(x=datetime, y=gcc)) +
+  geom_point(data=df_mid , aes(x=datetime, y=gcc),
+             size=2.5, pch=21, fill="aquamarine4", alpha=0.6) +
+  hrbrthemes::theme_ipsum_rc() +
   scale_fill_viridis_c(option = "D", direction = -1) +
-  scale_y_continuous(limits = c(0,0.6))+
+  scale_y_continuous(limits = c(0.2,0.6))+
   scale_x_datetime(date_breaks = "2 months", date_labels = "%Y-%b") +
   labs(title="Greenness Index (GCC)",
        subtitle= glue("A metric tracking growth using RGB values (Mask: {mask_type})"),
        x="", caption="Data from RECONYX hourly camera") +
   geom_image(
-    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), gcc = .25),
+    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), gcc = .27),
     aes(x=datetime, y=gcc, image = glue("{exif_path}/ROI/pheno_{site_id}_masked_{mask_type}.png")), size=0.5)
 
 ggsave(glue("figs/gcc_{site_id}_{mask_type}_midday.png"), width = 10, height = 8, dpi = 300, bg = "white")
@@ -185,8 +189,9 @@ ggsave(glue("figs/gcc_{site_id}_{mask_type}_midday.png"), width = 10, height = 8
 # GRVI: look at green red veg index which tracks senescence
 # expect: vegetation (index > 0), water and snow (index around 0), and soils (x < 0)
 ggplot() +
-  geom_point(data=df_mid , aes(x=datetime, y=GRVI), color="green4") + hrbrthemes::theme_ipsum_rc() +
   geom_smooth(data=df_mid, aes(x=datetime, y=GRVI)) +
+  geom_point(data=df_mid , aes(x=datetime, y=GRVI), size=2.5, pch=21, fill="aquamarine4", alpha=0.6) +
+  hrbrthemes::theme_ipsum_rc() +
   scale_y_continuous(limits = c(-0.2,0.4))+
   scale_x_datetime(date_breaks = "2 months", date_labels = "%Y-%b") +
   labs(title="Green-Red Vegetation Index (GRVI)",
@@ -201,7 +206,7 @@ ggsave(glue("figs/grvi_{site_id}_{mask_type}_midday.png"), width = 10, height = 
 # exGREEN
 ggplot() +
   geom_smooth(data=df_mid, aes(x=datetime, y=exG)) +
-  geom_point(data=df_mid, aes(x=datetime, y=exG), fill="aquamarine4", size=3, pch=21, alpha=.8) +
+  geom_point(data=df_mid, aes(x=datetime, y=exG), fill="aquamarine4", size=2.5, pch=21, alpha=.6) +
   hrbrthemes::theme_ipsum_rc() +
   #scale_y_continuous(limits = c(-50,90))+
   scale_x_datetime(date_breaks = "2 months", date_labels = "%Y-%b") +
@@ -209,7 +214,7 @@ ggplot() +
        subtitle= glue("A metric tracking excess greeness using RGB values (Mask: {mask_type})"),
        x="", caption="Data from RECONYX hourly camera") +
   geom_image(
-    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), exG = 158),
+    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), exG = 25),
     aes(x=datetime, y=exG, image = glue("{exif_path}/ROI/pheno_{site_id}_masked_{mask_type}.png")), size=0.4)
 
 ggsave(glue("figs/exG_{site_id}_{mask_type}_midday.png"), width = 10, height = 8, dpi = 300, bg = "white")
