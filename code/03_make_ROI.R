@@ -16,7 +16,7 @@ library(terra) # for working with raster images
 
 # Get Photo Directory --------------------------------------------
 
-site_id <- "COLE1" # location
+site_id <- "MABE4" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
@@ -41,7 +41,7 @@ photo_exif <- read_csv(glue("{exif_path}/pheno_exif_{site_id}_{photo_date_dir}.c
 # Select Photo for Drawing ROI -------------------------------------------------------
 
 # get a test image, change number for different image
-img <- terra::rast(glue("{photo_directory}/{photo_exif$pheno_name[83]}"))
+img <- terra::rast(glue("{photo_directory}/{photo_exif$pheno_name[20]}"))
 
 # flip?
 img <- terra::flip(img)
@@ -51,7 +51,6 @@ terra::plotRGB(img) # ignore projection warning
 
 # set bands
 RGB(img) <- 1:3
-
 
 # Draw ROI Polygon -----------------------------------------------------
 
@@ -68,11 +67,12 @@ RGB(img) <- 1:3
 # SH shrubs
 # TN tundra (includes sedges, lichens, mosses, etc.)
 # WT wetland
+# WA water
 
 # Create NEW mask type and number
 ## First number is for photo set (if photos shift and need a new version)
 ## second number is iterative to photo set and type
-mask_type <-"NA_01_01"
+mask_type <-"DB_01_01"
 
 # draw a polygon function
 drawPolygon <- function (col = "#80303080", lty = 1, ...)
@@ -110,11 +110,17 @@ plot(r) # preview mask plot
 
 fs::dir_create(path = glue("{exif_path}/ROI/"))
 terra::writeRaster(r, filename = glue("{exif_path}/ROI/{site_id}_{mask_type}.tif"))
+terra::writeRaster(r, filename = glue("ROI/{site_id}_{mask_type}.tif"))
 
 # Make a Plot -------------------------------------------------------------
 
 # make sure to save and write out (only once)
-png(filename = glue("{exif_path}/ROI/pheno_{site_id}_masked_{mask_type}.png"), bg = "transparent")
+png(filename = glue("{exif_path}/ROI/{site_id}_{mask_type}_roi_masked.png"), bg = "transparent")
+plotRGB(img)
+plot(r, col=c(NA, alpha("yellow",0.8)), legend=FALSE, axes=FALSE, add=TRUE)
+dev.off()
+
+png(filename = glue("ROI/{site_id}_{mask_type}_roi_masked.png"), bg = "transparent")
 plotRGB(img)
 plot(r, col=c(NA, alpha("yellow",0.8)), legend=FALSE, axes=FALSE, add=TRUE)
 dev.off()

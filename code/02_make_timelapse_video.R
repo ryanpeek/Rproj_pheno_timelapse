@@ -13,8 +13,7 @@ library(purrr) # for looping
 
 # Set Parameters ----------------------------------------------------------
 
-grp_id <- "" # dfw region
-site_id <- "DOWN1" # location
+site_id <- "RSWO3" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
