@@ -47,7 +47,7 @@ pheno_mask <- terra::rast(glue("{exif_path}/ROI/{site_id}_{mask_type}.tif"))
 ## TEST PLOTS --------------------------------------------------------------
 
 # test a single photo
-img <- terra::rast(glue("{photo_directory}/{photo_exif$pheno_name[10]}"))
+img <- terra::rast(glue("{photo_directory}/{photo_exif$pheno_name[50]}"))
 
 # plot to make sure mask is in the appropriate place...if not, need to redraw
 #plotRGB(img)
@@ -170,7 +170,7 @@ library(ggimage)
 # set the date to use for these plots (depends on photo set)
 range(df_mid$datetime)
 # here we pick 7 days prior to the last photo
-photo_date_location <- max(df_mid$datetime)-days(7)
+photo_date_location <- max(df_mid$datetime)-days(13)
 
 # or specify manually:
 #photo_date_location <- "2024-08-21 00:00:00"
@@ -206,7 +206,7 @@ ggplot() +
        subtitle= glue("A metric tracking growth and senescence using RGB values (Mask: {mask_type})"),
        x="", caption="Data from RECONYX hourly camera") +
   geom_image(
-    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), GRVI = 0.15),
+    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), GRVI = 0.29),
     aes(x=datetime, y=GRVI, image = glue("{exif_path}/ROI/{site_id}_{mask_type}_roi_masked.png")), size=0.4)
 
 ggsave(glue("figs/grvi_{site_id}_{mask_type}_midday.png"), width = 10, height = 8, dpi = 300, bg = "white")
@@ -223,12 +223,14 @@ ggplot() +
        subtitle= glue("A metric tracking excess greeness using RGB values (Mask: {mask_type})"),
        x="", caption="Data from RECONYX hourly camera") +
   geom_image(
-    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), exG = 65),
+    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), exG = 140),
     aes(x=datetime, y=exG, image = glue("{exif_path}/ROI/{site_id}_{mask_type}_roi_masked.png")), size=0.4)
 
 ggsave(glue("figs/exG_{site_id}_{mask_type}_midday.png"), width = 10, height = 8, dpi = 300, bg = "white")
 
 # TIMESERIES ANALYSIS ------------------------------------------------------------------
+
+# read and extract site only: str_extract(head(df_mid$pheno_name), "[A-Z]+\\d{1}")
 
 library(timetk)
 
