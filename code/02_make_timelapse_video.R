@@ -13,7 +13,7 @@ library(purrr) # for looping
 
 # Set Parameters ----------------------------------------------------------
 
-site_id <- "RSWO3" # location
+site_id <- "FORE1" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use

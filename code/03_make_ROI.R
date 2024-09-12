@@ -16,7 +16,7 @@ library(terra) # for working with raster images
 
 # Get Photo Directory --------------------------------------------
 
-site_id <- "MABE4" # location
+site_id <- "FORE1" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
@@ -41,16 +41,20 @@ photo_exif <- read_csv(glue("{exif_path}/pheno_exif_{site_id}_{photo_date_dir}.c
 # Select Photo for Drawing ROI -------------------------------------------------------
 
 # get a test image, change number for different image
-img <- terra::rast(glue("{photo_directory}/{photo_exif$pheno_name[20]}"))
+img <- terra::rast(glue("{photo_directory}/{photo_exif$pheno_name[77]}"))
 
 # flip?
-img <- terra::flip(img)
+#img <- terra::flip(img)
 
 # plot
 terra::plotRGB(img) # ignore projection warning
 
 # set bands
 RGB(img) <- 1:3
+
+# if on osx, need to start quartz window:
+# quartz()
+# terra::plotRGB(img) # ignore projection warning
 
 # Draw ROI Polygon -----------------------------------------------------
 
@@ -109,8 +113,8 @@ plot(r) # preview mask plot
 # Write out ROI Mask -----------------------------------------------------------
 
 fs::dir_create(path = glue("{exif_path}/ROI/"))
-terra::writeRaster(r, filename = glue("{exif_path}/ROI/{site_id}_{mask_type}.tif"))
-terra::writeRaster(r, filename = glue("ROI/{site_id}_{mask_type}.tif"))
+terra::writeRaster(r, filename = glue("{exif_path}/ROI/{site_id}_{mask_type}.tif"), overwrite=TRUE)
+terra::writeRaster(r, filename = glue("ROI/{site_id}_{mask_type}.tif"), overwrite=TRUE)
 
 # Make a Plot -------------------------------------------------------------
 
@@ -135,3 +139,5 @@ r_poly <- as.polygons(r_in) # make polygons
 r_poly[2]
 terra::plotRGB(img) # ignore projection warning
 plot(r_poly[2], add=TRUE, col="yellow2")
+#dev.off()
+#graphics.off()

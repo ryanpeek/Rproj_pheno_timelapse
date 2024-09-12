@@ -11,7 +11,7 @@ library(terra)
 
 # Get Photo Directory --------------------------------------------
 
-site_id <- "SAHE1" # location
+site_id <- "FORE1" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
@@ -39,7 +39,7 @@ photo_exif <- read_csv(glue("{exif_path}/pheno_exif_{site_id}_{photo_date_dir}.c
 # if a new photo set, use DB_02_01
 # if same photo set but new polygon of same veg type, use DB_01_02
 
-mask_type <-"GR_01_01"
+mask_type <-"DB_01_01"
 
 # read in mask
 pheno_mask <- terra::rast(glue("{exif_path}/ROI/{site_id}_{mask_type}.tif"))
@@ -188,7 +188,7 @@ ggplot() +
        subtitle= glue("A metric tracking growth using RGB values (Mask: {mask_type})"),
        x="", caption="Data from RECONYX hourly camera") +
   geom_image(
-    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), gcc = .55),
+    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), gcc = .37),
     aes(x=datetime, y=gcc, image = glue("{exif_path}/ROI/{site_id}_{mask_type}_roi_masked.png")), size=0.5)
 
 ggsave(glue("figs/gcc_{site_id}_{mask_type}_midday.png"), width = 10, height = 8, dpi = 300, bg = "white")
@@ -206,7 +206,7 @@ ggplot() +
        subtitle= glue("A metric tracking growth and senescence using RGB values (Mask: {mask_type})"),
        x="", caption="Data from RECONYX hourly camera") +
   geom_image(
-    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), GRVI = 0.18),
+    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), GRVI = 0.15),
     aes(x=datetime, y=GRVI, image = glue("{exif_path}/ROI/{site_id}_{mask_type}_roi_masked.png")), size=0.4)
 
 ggsave(glue("figs/grvi_{site_id}_{mask_type}_midday.png"), width = 10, height = 8, dpi = 300, bg = "white")
@@ -223,7 +223,7 @@ ggplot() +
        subtitle= glue("A metric tracking excess greeness using RGB values (Mask: {mask_type})"),
        x="", caption="Data from RECONYX hourly camera") +
   geom_image(
-    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), exG = 160),
+    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), exG = 65),
     aes(x=datetime, y=exG, image = glue("{exif_path}/ROI/{site_id}_{mask_type}_roi_masked.png")), size=0.4)
 
 ggsave(glue("figs/exG_{site_id}_{mask_type}_midday.png"), width = 10, height = 8, dpi = 300, bg = "white")
