@@ -16,7 +16,7 @@ library(terra) # for working with raster images
 
 # Get Photo Directory --------------------------------------------
 
-site_id <- "FORE1" # location
+site_id <- "CSVER_C10" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
@@ -33,6 +33,7 @@ photo_directory
 
 # create path to drive location:
 photo_date_dir <- basename(photo_directory)
+#photo_date_dir <- "20240604" # can specify manually if necessary
 exif_path <- fs::path_dir(photo_directory)
 
 # read in the exif metadata (run via 02_extract_metadata)
@@ -41,10 +42,10 @@ photo_exif <- read_csv(glue("{exif_path}/pheno_exif_{site_id}_{photo_date_dir}.c
 # Select Photo for Drawing ROI -------------------------------------------------------
 
 # get a test image, change number for different image
-img <- terra::rast(glue("{photo_directory}/{photo_exif$pheno_name[77]}"))
+img <- terra::rast(glue("{photo_directory}/{photo_exif$pheno_name[72]}"))
 
 # flip?
-#img <- terra::flip(img)
+img <- terra::flip(img)
 
 # plot
 terra::plotRGB(img) # ignore projection warning

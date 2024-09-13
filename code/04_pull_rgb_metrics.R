@@ -11,7 +11,7 @@ library(terra)
 
 # Get Photo Directory --------------------------------------------
 
-site_id <- "FORE1" # location
+site_id <- "CSVER_C10" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
@@ -39,7 +39,7 @@ photo_exif <- read_csv(glue("{exif_path}/pheno_exif_{site_id}_{photo_date_dir}.c
 # if a new photo set, use DB_02_01
 # if same photo set but new polygon of same veg type, use DB_01_02
 
-mask_type <-"DB_01_01"
+mask_type <-"GR_01_01"
 
 # read in mask
 pheno_mask <- terra::rast(glue("{exif_path}/ROI/{site_id}_{mask_type}.tif"))
@@ -47,7 +47,7 @@ pheno_mask <- terra::rast(glue("{exif_path}/ROI/{site_id}_{mask_type}.tif"))
 ## TEST PLOTS --------------------------------------------------------------
 
 # test a single photo
-img <- terra::rast(glue("{photo_directory}/{photo_exif$pheno_name[50]}"))
+img <- terra::rast(glue("{photo_directory}/{photo_exif$pheno_name[12]}"))
 
 # plot to make sure mask is in the appropriate place...if not, need to redraw
 #plotRGB(img)
@@ -170,7 +170,7 @@ library(ggimage)
 # set the date to use for these plots (depends on photo set)
 range(df_mid$datetime)
 # here we pick 7 days prior to the last photo
-photo_date_location <- max(df_mid$datetime)-days(13)
+photo_date_location <- max(df_mid$datetime)-days(9)
 
 # or specify manually:
 #photo_date_location <- "2024-08-21 00:00:00"
@@ -182,13 +182,13 @@ ggplot() +
   hrbrthemes::theme_ipsum_rc() +
   scale_fill_viridis_c(option = "D", direction = -1) +
   scale_y_continuous(limits = c(0.3,0.6))+
-  scale_x_datetime(date_breaks = "2 weeks", date_labels = "%Y-%b-%d") +
-  #scale_x_datetime(date_breaks = "2 months", date_labels = "%Y-%b") +
+  #scale_x_datetime(date_breaks = "2 weeks", date_labels = "%Y-%b-%d") +
+  scale_x_datetime(date_breaks = "2 months", date_labels = "%Y-%b") +
   labs(title=glue("Greenness Index (GCC): {site_id}"),
        subtitle= glue("A metric tracking growth using RGB values (Mask: {mask_type})"),
        x="", caption="Data from RECONYX hourly camera") +
   geom_image(
-    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), gcc = .37),
+    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), gcc = .52),
     aes(x=datetime, y=gcc, image = glue("{exif_path}/ROI/{site_id}_{mask_type}_roi_masked.png")), size=0.5)
 
 ggsave(glue("figs/gcc_{site_id}_{mask_type}_midday.png"), width = 10, height = 8, dpi = 300, bg = "white")
@@ -200,13 +200,13 @@ ggplot() +
   geom_point(data=df_mid , aes(x=datetime, y=GRVI), size=2.5, pch=21, fill="aquamarine4", alpha=0.6) +
   hrbrthemes::theme_ipsum_rc() +
   #scale_y_continuous(limits = c(-0.2,0.2))+
-  scale_x_datetime(date_breaks = "2 weeks", date_labels = "%Y-%b-%d") +
-  #scale_x_datetime(date_breaks = "2 months", date_labels = "%Y-%b") +
+  #scale_x_datetime(date_breaks = "2 weeks", date_labels = "%Y-%b-%d") +
+  scale_x_datetime(date_breaks = "2 months", date_labels = "%Y-%b") +
   labs(title=glue("Green-Red Vegetation Index (GRVI): {site_id}"),
        subtitle= glue("A metric tracking growth and senescence using RGB values (Mask: {mask_type})"),
        x="", caption="Data from RECONYX hourly camera") +
   geom_image(
-    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), GRVI = 0.29),
+    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), GRVI = -0.02),
     aes(x=datetime, y=GRVI, image = glue("{exif_path}/ROI/{site_id}_{mask_type}_roi_masked.png")), size=0.4)
 
 ggsave(glue("figs/grvi_{site_id}_{mask_type}_midday.png"), width = 10, height = 8, dpi = 300, bg = "white")
@@ -217,13 +217,13 @@ ggplot() +
   geom_point(data=df_mid, aes(x=datetime, y=exG), fill="aquamarine4", size=2.5, pch=21, alpha=.6) +
   hrbrthemes::theme_ipsum_rc() +
   #scale_y_continuous(limits = c(-50,90))+
-  scale_x_datetime(date_breaks = "2 weeks", date_labels = "%Y-%b-%d") +
-  #scale_x_datetime(date_breaks = "2 months", date_labels = "%Y-%b") +
+  #scale_x_datetime(date_breaks = "2 weeks", date_labels = "%Y-%b-%d") +
+  scale_x_datetime(date_breaks = "2 months", date_labels = "%Y-%b") +
   labs(title=glue("Excess Greeness (exG): {site_id}"),
        subtitle= glue("A metric tracking excess greeness using RGB values (Mask: {mask_type})"),
        x="", caption="Data from RECONYX hourly camera") +
   geom_image(
-    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), exG = 140),
+    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), exG = 130),
     aes(x=datetime, y=exG, image = glue("{exif_path}/ROI/{site_id}_{mask_type}_roi_masked.png")), size=0.4)
 
 ggsave(glue("figs/exG_{site_id}_{mask_type}_midday.png"), width = 10, height = 8, dpi = 300, bg = "white")

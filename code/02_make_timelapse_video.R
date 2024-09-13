@@ -13,7 +13,7 @@ library(purrr) # for looping
 
 # Set Parameters ----------------------------------------------------------
 
-site_id <- "FORE1" # location
+site_id <- "CSVER_C10" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
@@ -30,6 +30,7 @@ photo_directory
 
 # create path to drive location:
 photo_date_dir <- basename(photo_directory)
+#photo_date_dir <- "20240314" # can specify manually if necessary
 exif_path <- fs::path_dir(photo_directory)
 
 # read in the exif metadata (run via 02_extract_metadata)
