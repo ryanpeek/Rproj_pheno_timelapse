@@ -13,7 +13,7 @@ library(purrr) # for looping
 
 # Set Parameters ----------------------------------------------------------
 
-site_id <- "CSVER_C10" # location
+site_id <- "KWA_BDR16" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
@@ -44,7 +44,6 @@ get_photo_stack <- function(photo_paths, scale_w_h){
                image_scale(scale_w_h)) %>%
     image_join()
 }
-
 
 # Filter -----------------------------------------------------------------
 

@@ -53,7 +53,7 @@ if(!is.null(exif_version())){
 # Set Paths ---------------------------------------------------------------
 
 # CHANGE/CHECK THESE!
-site_id <- "CSVER_C10" # Site ID (avoid spaces and special characters)
+site_id <- "KWA_BDR16" # Site ID (avoid spaces and special characters)
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
@@ -121,6 +121,7 @@ photo_attribs |> group_by(pheno_name) |> tally() |> filter(n>1) |> nrow()
 
 # create path to drive location:
 metadata_path <- fs::path_dir(photo_directory)
+photo_attribs <- photo_attribs |> arrange(datetime)
 last_date <- last(format(as_date(photo_attribs$datetime), '%Y%m%d'))
 
 # write out metadata
