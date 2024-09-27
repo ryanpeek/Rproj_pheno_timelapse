@@ -9,11 +9,12 @@ library(fs) # file systems
 library(glue) # pasting paths
 library(magick) # for resizing images
 library(purrr) # for looping
+library(beepr) # to know when things are done
 
 
 # Set Parameters ----------------------------------------------------------
 
-site_id <- "KWA_BDR16" # location
+site_id <- "COWO1" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use

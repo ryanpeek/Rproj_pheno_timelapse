@@ -53,7 +53,7 @@ if(!is.null(exif_version())){
 # Set Paths ---------------------------------------------------------------
 
 # CHANGE/CHECK THESE!
-site_id <- "KWA_BDR16" # Site ID (avoid spaces and special characters)
+site_id <- "COWO1" # Site ID (avoid spaces and special characters)
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
