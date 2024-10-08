@@ -16,7 +16,7 @@ library(terra) # for working with raster images
 
 # Get Photo Directory --------------------------------------------
 
-site_id <- "COWO1" # location
+site_id <- "CampCreek_C01" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
@@ -42,10 +42,10 @@ photo_exif <- read_csv(glue("{exif_path}/pheno_exif_{site_id}_{photo_date_dir}.c
 # Select Photo for Drawing ROI -------------------------------------------------------
 
 # get a test image, change number for different image
-img <- terra::rast(glue("{photo_directory}/{photo_exif$pheno_name[74]}"))
+img <- terra::rast(glue("{photo_directory}/{photo_exif$pheno_name[1966]}"))
 
 # flip?
-#img <- terra::flip(img)
+img <- terra::flip(img)
 
 # plot
 terra::plotRGB(img) # ignore projection warning
@@ -54,8 +54,8 @@ terra::plotRGB(img) # ignore projection warning
 RGB(img) <- 1:3
 
 # if on osx, need to start quartz window:
-quartz()
-terra::plotRGB(img) # ignore projection warning
+#quartz()
+#terra::plotRGB(img) # ignore projection warning
 
 # Draw ROI Polygon -----------------------------------------------------
 
@@ -77,7 +77,7 @@ terra::plotRGB(img) # ignore projection warning
 # Create NEW mask type and number
 ## First number is for photo set (if photos shift and need a new version)
 ## second number is iterative to photo set and type
-mask_type <-"WT_01_01"
+mask_type <-"DB_04_01"
 
 # draw a polygon function
 drawPolygon <- function (col = "#80303080", lty = 1, ...)
