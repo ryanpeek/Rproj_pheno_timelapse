@@ -28,6 +28,12 @@ library(digest) # for unique hash ID
 ## make sure the version number matches what you have
 ## (different versions should still work, just need the correct one below for the path to work)
 
+# set CDFW paths:
+#username <- Sys.getenv("USERNAME")
+#drive <- r'(C:\Users\)'
+#onedrive <- r'(OneDrive - California Department of Fish and Wildlife\)'
+
+# if you put in Downloads, this should work as long as you update version
 # path_to_exif_zip <- glue("{drive}/{username}/Downloads/exiftool-12.87.zip")
 
 ## 3. Check path works!
@@ -53,7 +59,7 @@ if(!is.null(exif_version())){
 # Set Paths ---------------------------------------------------------------
 
 # CHANGE/CHECK THESE!
-site_id <- "TahoeMFA_CRLF11" # Site ID (avoid spaces and special characters)
+site_id <- "COWO1" # Site ID (avoid spaces and special characters)
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use

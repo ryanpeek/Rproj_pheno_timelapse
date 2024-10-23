@@ -53,7 +53,7 @@ table(photo_metrics$mask_type)
 # Plot All  ---------------------------------------------------------------
 
 # filter to same mask type and then plot:
-mask_sel <- "DB"
+mask_sel <- "GR"
 df_filt <- photo_metrics |> filter(mask_type==mask_sel)
 
 ## GCC ---------------------------------------------------------------------

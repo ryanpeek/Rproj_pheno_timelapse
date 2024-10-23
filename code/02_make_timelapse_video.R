@@ -14,7 +14,7 @@ library(beepr) # to know when things are done
 
 # Set Parameters ----------------------------------------------------------
 
-site_id <- "TahoeMFA_CRLF11" # location
+site_id <- "COWO1" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
