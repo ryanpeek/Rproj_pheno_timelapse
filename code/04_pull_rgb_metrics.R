@@ -11,7 +11,7 @@ library(terra)
 
 # Get Photo Directory --------------------------------------------
 
-site_id <- "TahoeMFA_CRLF11" # location
+site_id <- "NorthYuba.RockyRest" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
@@ -39,7 +39,7 @@ photo_exif <- read_csv(glue("{exif_path}/pheno_exif_{site_id}_{photo_date_dir}.c
 # if a new photo set, use DB_02_01
 # if same photo set but new polygon of same veg type, use DB_01_02
 
-mask_type <-"SH_01_02"
+mask_type <-"SH_01_01"
 
 # read in mask
 pheno_mask <- terra::rast(glue("{exif_path}/ROI/{site_id}_{mask_type}.tif"))
@@ -181,7 +181,7 @@ ggplot() +
              size=2.5, pch=21, fill="aquamarine4", alpha=0.6) +
   hrbrthemes::theme_ipsum_rc() +
   scale_fill_viridis_c(option = "D", direction = -1) +
-  scale_y_continuous(limits = c(0.3,0.5))+
+  #scale_y_continuous(limits = c(0.3,0.5))+
   #scale_x_datetime(date_breaks = "2 weeks", date_labels = "%Y-%b-%d") +
   scale_x_datetime(date_breaks = "1 months", date_labels = "%Y-%b") +
   labs(title=glue("Greenness Index (GCC): {site_id}"),
@@ -206,8 +206,8 @@ ggplot() +
        subtitle= glue("A metric tracking growth and senescence using RGB values (Mask: {mask_type})"),
        x="", caption="Data from RECONYX hourly camera") +
   geom_image(
-    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), GRVI = 0.2),
-    aes(x=datetime, y=GRVI, image = glue("{exif_path}/ROI/{site_id}_{mask_type}_roi_masked.png")), size=0.65)
+    data = tibble(datetime = ymd_hms(glue("{photo_date_location}")), GRVI = 0.22),
+    aes(x=datetime, y=GRVI, image = glue("{exif_path}/ROI/{site_id}_{mask_type}_roi_masked.png")), size=0.5)
 
 ggsave(glue("figs/grvi_{site_id}_{mask_type}_midday.png"), width = 10, height = 8, dpi = 300, bg = "white")
 
@@ -227,4 +227,19 @@ ggplot() +
     aes(x=datetime, y=exG, image = glue("{exif_path}/ROI/{site_id}_{mask_type}_roi_masked.png")), size=0.45)
 
 ggsave(glue("figs/exG_{site_id}_{mask_type}_midday.png"), width = 10, height = 8, dpi = 300, bg = "white")
+
+
+# look at Green Blue
+# ggplot() +
+#   geom_smooth(data=df_mid, aes(x=datetime, y=gbR)) +
+#   geom_point(data=df_mid, aes(x=datetime, y=gbR), fill="aquamarine4", size=2.5, pch=21, alpha=.6) +
+#   hrbrthemes::theme_ipsum_rc() +
+#   #scale_y_continuous(limits = c(-50,90))+
+#   scale_x_datetime(date_breaks = "4 weeks", date_labels = "%Y-%b-%d") +
+#   #scale_x_datetime(date_breaks = "1 months", date_labels = "%Y-%b") +
+#   labs(title=glue("Water: {site_id}"),
+#        subtitle= glue("A metric tracking water (Mask: {mask_type})"),
+#        x="", caption="Data from RECONYX hourly camera")
+#
+# ggsave(glue("figs/exG_{site_id}_{mask_type}_midday.png"), width = 10, height = 8, dpi = 300, bg = "white")
 
