@@ -77,7 +77,7 @@ RGB(img) <- 1:3
 # Create NEW mask type and number
 ## First number is for photo set (if photos shift and need a new version)
 ## second number is iterative to photo set and type
-mask_type <-"WA_01_02"
+mask_type <-"EN_01_01"
 
 # draw a polygon function
 drawPolygon <- function (col = "#80303080", lty = 1, ...)
