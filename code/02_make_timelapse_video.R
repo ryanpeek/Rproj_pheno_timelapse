@@ -14,7 +14,7 @@ library(beepr) # to know when things are done
 
 # Set Parameters ----------------------------------------------------------
 
-site_id <- "NorthYuba.Goodyears" # location
+site_id <- "TWA3" # location
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
@@ -56,6 +56,10 @@ photo_exif_noon <- photo_exif |>
   filter(hms(glue("{filt_time}"))==hms::as_hms(datetime))
 
 # Get photo composite ----------------------------------------------------
+
+# this takes all photos, resizes and stacks
+photo_stack <- get_photo_stack(glue("{photo_directory}/{photo_exif$pheno_name_uniq}"), scale_w_h = "800x560")
+beepr::beep()
 
 # this takes all photos from the filtered dataset and resizes and stacks
 photo_stack <- get_photo_stack(glue("{photo_directory}/{photo_exif_noon$pheno_name}"), scale_w_h = "800x560")
