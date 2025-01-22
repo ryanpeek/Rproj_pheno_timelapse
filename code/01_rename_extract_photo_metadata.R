@@ -16,51 +16,52 @@ library(digest) # for unique hash ID
 
 # Getting Exiftools Installed ---------------------------------------------
 
-# this process only needs to be done ONCE per R installation (version)
-# un-comment steps 1-3 and run lines, editing paths as necessary.
+## this process only needs to be done ONCE per R installation (version)
+## Go through steps 1-3 and run lines below the double ##
 
-# 1. Download the ExifTool Windows Executable (stand-alone) version (.zip) from here:
+## 1. Download the ExifTool Windows Executable (stand-alone) version (.zip) from here:
 
 ## https://exiftool.org/, look for Windows Executable: exiftool-xx.xx.zip
 ## Download to default downloads folder (i.e., Downloads/exiftool-12.87.zip)
 
-# 2. create path to the downloaded tool:
+## 2. create path to the downloaded tool:
 
 ## make sure the version number matches what you have
 ## (different versions should still work, just need the correct one below for the path to work)
 
 ## SET CDFW PATHS
+## if using another OS (Mac or Linux), your path is different
 
-## These don't need to be changed!
-# username <- Sys.getenv("USERNAME") # gets set automatically
-# drive <- r'(C:\Users\)' # standard on windows
+## These don't need to be changed, they are set automagically and work on windows
+username <- Sys.getenv("USERNAME")
+drive <- r'(C:\Users\)'
 
 ## These may need to be changed!
 ## Verify your OneDrive path and change as needed:
-# onedrive <- r'(OneDrive - California Department of Fish and Wildlife\)'
+onedrive <- r'(OneDrive - California Department of Fish and Wildlife\)'
 
 ##  if you put in Downloads, this should work as long as you update version
-# path_to_exif_zip <- glue("{drive}/{username}/Downloads/exiftool-12.87.zip")
+path_to_exif_zip <- glue("{drive}/{username}/Downloads/exiftool-12.99_64.zip")
 
-# 3. Check path works!
+## 3. Check path works!
 
-# if(fs::file_exists(path_to_exif_zip)=="TRUE") {
-#   print("Path is legit!")
-# } else( "Path is borked...double check")
+if(fs::file_exists(path_to_exif_zip)=="TRUE") {
+  print("Path is legit!")
+} else( "Path is borked...double check")
 
-# 4. Now we can test and install
+## 4. Now we can test and install
 
 ## this only needs to be done once!
-# install_exiftool(local_exiftool = path_to_exif_zip)
+install_exiftool(local_exiftool = path_to_exif_zip)
 
 ## Check EXIF works: should get "Using ExifTool version XX.XX" and the version
 
-# exif_version()
+exif_version()
 
 # Set Paths ---------------------------------------------------------------
 
 # CHANGE/CHECK THESE!
-site_id <- "TWA4" # Site ID (avoid spaces and special characters)
+site_id <- "NFY-GDYR" # Site ID (avoid spaces and special characters)
 
 # Full path to folder where photos are located
 # this function helps select the folder and ensures there are images in the folder to use
