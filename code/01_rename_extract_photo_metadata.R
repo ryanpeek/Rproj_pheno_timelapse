@@ -20,6 +20,7 @@ library(digest) # for unique hash ID
 # un-comment steps 1-3 and run lines, editing paths as necessary.
 
 # 1. Download the ExifTool Windows Executable (stand-alone) version (.zip) from here:
+
 ## https://exiftool.org/, look for Windows Executable: exiftool-xx.xx.zip
 ## Download to default downloads folder (i.e., Downloads/exiftool-12.87.zip)
 
@@ -28,15 +29,20 @@ library(digest) # for unique hash ID
 ## make sure the version number matches what you have
 ## (different versions should still work, just need the correct one below for the path to work)
 
-# set CDFW paths:
-#username <- Sys.getenv("USERNAME")
-#drive <- r'(C:\Users\)'
-#onedrive <- r'(OneDrive - California Department of Fish and Wildlife\)'
+## SET CDFW PATHS
 
-# if you put in Downloads, this should work as long as you update version
+## These don't need to be changed!
+# username <- Sys.getenv("USERNAME") # gets set automatically
+# drive <- r'(C:\Users\)' # standard on windows
+
+## These may need to be changed!
+## Verify your OneDrive path and change as needed:
+# onedrive <- r'(OneDrive - California Department of Fish and Wildlife\)'
+
+##  if you put in Downloads, this should work as long as you update version
 # path_to_exif_zip <- glue("{drive}/{username}/Downloads/exiftool-12.87.zip")
 
-## 3. Check path works!
+# 3. Check path works!
 
 # if(fs::file_exists(path_to_exif_zip)=="TRUE") {
 #   print("Path is legit!")
@@ -45,16 +51,11 @@ library(digest) # for unique hash ID
 # 4. Now we can test and install
 
 ## this only needs to be done once!
+# install_exiftool(local_exiftool = path_to_exif_zip)
 
-# if(is.null(exif_version())){
-#   install_exiftool(local_exiftool = path_to_exif_zip)
-#   print("Installed!")
-# } else( "already installed!")
+## Check EXIF works: should get "Using ExifTool version XX.XX" and the version
 
-# Check EXIF works:
-if(!is.null(exif_version())){
-  glue("exiftools successfully installed! \n Version: {exif_version()}")
-} else( "exiftools is not installed, check that path is correct and rerun install_exiftool()")
+# exif_version()
 
 # Set Paths ---------------------------------------------------------------
 
